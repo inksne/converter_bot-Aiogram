@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  back:
+    image: inksne/converter-bot-image:latest
+    container_name: converter-bot-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "10000:10000"
+    env_file:
+      - .env
+    command: ["python", "main.py"]
