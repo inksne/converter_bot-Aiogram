@@ -4,20 +4,22 @@ from aiogram.utils import markdown
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.enums.chat_action import ChatAction
 
+from fastapi import FastAPI
+import uvicorn
+
 import logging
 import asyncio
 
-from config import BOT_TOKEN, PORT_STR
+from config import BOT_TOKEN
 from converters.jpg_and_png_to_ico import image_to_ico, ico_to_image
 from converters.json_to_xml import json_to_xml, xml_to_json
 from converters.png_to_jpeg import convert_image
 from converters.jpg_and_png_to_gif import convert_gif_to_image, convert_image_to_gif
 from converters.zip_to_tar import convert_tar_gz_to_zip, convert_zip_to_tar_gz
 
-PORT = int(PORT_STR)
-
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
+app = FastAPI()
 
 
 @dp.message(CommandStart())
@@ -265,9 +267,19 @@ async def handle_tar_to_zip(message: types.Message):
         await message.answer("Пожалуйста, отправьте файл с командой /tar_to_zip.")
 
 
-async def main():
+async def start_bot():
     logging.basicConfig(level=logging.INFO)
     await dp.start_polling(bot)
+
+
+async def main():
+    uvicorn_config = uvicorn.Config("main:app", host="0.0.0.0", port=10000)
+    server = uvicorn.Server(uvicorn_config)
+    
+    await asyncio.gather(
+        start_bot(),
+        server.serve()
+    )
 
 
 if __name__ == '__main__':
