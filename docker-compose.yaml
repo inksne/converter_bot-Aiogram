@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   back:
     image: inksne/converter-bot-image:latest
@@ -10,5 +8,6 @@ services:
     ports:
       - "10000:10000"
     env_file:
-      - .env
+      - ./.env
     command: ["python", "main.py"]
+    restart: always
