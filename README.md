@@ -41,10 +41,6 @@
 
 Файл с тестами основных команд.
 
-### Dockerfile & Procfile
-
-Файлы для деплоя на [render](https://render.com/).
-
 ## CI/CD
 
 В пайплайне я добавил всего лишь две джобы: build и test.
